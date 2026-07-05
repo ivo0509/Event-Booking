@@ -1,0 +1,20 @@
+:root {
+  --app-min-height: calc(100vh - 120px);
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.page-content {
+  flex: 1;
+  min-height: var(--app-min-height);
+}

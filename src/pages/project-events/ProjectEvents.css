@@ -1,0 +1,4 @@
+.project-events-page [data-project-id] {
+  font-weight: 600;
+  color: var(--bs-primary);
+}

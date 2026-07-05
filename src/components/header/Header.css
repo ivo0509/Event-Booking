@@ -1,0 +1,4 @@
+.site-header .nav-link.active {
+  font-weight: 600;
+  color: var(--bs-primary) !important;
+}
