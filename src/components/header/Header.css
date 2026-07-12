@@ -79,12 +79,17 @@
   color: #fff;
 }
 
+.site-header__logout {
+  padding: 0.55rem 1.35rem;
+}
+
 .site-header__login.active::after {
   display: none;
 }
 
 @media (max-width: 991.98px) {
-  .site-header__login {
+  .site-header__login,
+  .site-header__logout {
     display: inline-flex;
     width: fit-content;
     margin-top: 0.5rem;

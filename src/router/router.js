@@ -6,10 +6,12 @@ const routes = [
   {
     path: '/login',
     page: () => import('../pages/login/Login.js'),
+    guestOnly: true,
   },
   {
     path: '/dashboard',
     page: () => import('../pages/dashboard/Dashboard.js'),
+    requiresAuth: true,
   },
   {
     path: '/projects/:id/events',
@@ -19,6 +21,11 @@ const routes = [
 
 let contentContainer = null;
 let currentPageModule = null;
+
+async function getSession() {
+  const { getSession: fetchSession } = await import('../lib/auth.js');
+  return fetchSession();
+}
 
 function matchRoute(pathname) {
   for (const route of routes) {
@@ -100,6 +107,18 @@ async function renderCurrentRoute() {
       </section>
     `;
     document.title = 'Not Found — Event Booking';
+    return;
+  }
+
+  const session = await getSession();
+
+  if (match.route.requiresAuth && !session) {
+    navigate('/login', true);
+    return;
+  }
+
+  if (match.route.guestOnly && session) {
+    navigate('/dashboard', true);
     return;
   }
 
