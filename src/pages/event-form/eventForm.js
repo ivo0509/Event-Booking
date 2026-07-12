@@ -1,3 +1,10 @@
+import { isAdmin } from '../../lib/auth.js';
+import {
+  deleteEventImage,
+  getEventImagePublicUrl,
+  uploadEventImage,
+  validateImageFile,
+} from '../../lib/eventImages.js';
 import { EVENT_CATEGORIES, createEvent, fetchEventById, updateEvent } from '../../lib/events.js';
 import { fromDatetimeLocalValue, toDatetimeLocalValue } from '../../lib/format.js';
 import { navigate } from '../../router/router.js';
@@ -52,6 +59,33 @@ function validateForm(values) {
   return true;
 }
 
+function revokePreviewUrl(url) {
+  if (url?.startsWith('blob:')) {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function showImagePreview(previewWrap, previewImg, src) {
+  if (!previewWrap || !previewImg || !src) {
+    previewWrap?.classList.add('d-none');
+    if (previewImg) previewImg.removeAttribute('src');
+    return;
+  }
+
+  previewImg.src = src;
+  previewWrap.classList.remove('d-none');
+}
+
+async function saveCoverImage({ eventId, pendingImageFile, existingCoverPath }) {
+  const newPath = await uploadEventImage(eventId, pendingImageFile);
+
+  if (existingCoverPath && existingCoverPath !== newPath) {
+    await deleteEventImage(existingCoverPath).catch(() => {});
+  }
+
+  return newPath;
+}
+
 export async function initEventForm(container, options = {}) {
   const {
     mode,
@@ -68,9 +102,85 @@ export async function initEventForm(container, options = {}) {
   const categorySelect = container.querySelector('[data-category-select]');
   const backLink = container.querySelector('[data-back-link]');
   const cancelLink = container.querySelector('[data-cancel-link]');
+  const coverSection = container.querySelector('[data-cover-image-section]');
+  const coverInput = container.querySelector('[data-cover-image-input]');
+  const previewWrap = container.querySelector('[data-cover-image-preview]');
+  const previewImg = container.querySelector('[data-cover-image-preview-img]');
+  const removeImageBtn = container.querySelector('[data-cover-image-remove]');
+
+  let pendingImageFile = null;
+  let originalCoverPath = null;
+  let removeCoverImage = false;
+  let previewObjectUrl = null;
+  let previewSource = 'none';
+
+  function setPreview(source, src = null) {
+    previewSource = source;
+    showImagePreview(previewWrap, previewImg, src);
+  }
+
+  function clearPendingSelection() {
+    pendingImageFile = null;
+    coverInput.value = '';
+    revokePreviewUrl(previewObjectUrl);
+    previewObjectUrl = null;
+  }
+
+  function restoreExistingPreview() {
+    if (originalCoverPath && !removeCoverImage) {
+      setPreview('existing', getEventImagePublicUrl(originalCoverPath));
+      return;
+    }
+
+    setPreview('none');
+  }
+
+  function handleRemoveImage() {
+    if (previewSource === 'pending') {
+      clearPendingSelection();
+      restoreExistingPreview();
+      return;
+    }
+
+    if (previewSource === 'existing') {
+      removeCoverImage = true;
+      clearPendingSelection();
+      setPreview('none');
+    }
+  }
 
   if (backLink) backLink.setAttribute('href', backHref);
   if (cancelLink) cancelLink.setAttribute('href', cancelHref);
+
+  const admin = await isAdmin();
+  if (admin) {
+    coverSection?.classList.remove('d-none');
+  }
+
+  removeImageBtn?.addEventListener('click', handleRemoveImage);
+
+  coverInput?.addEventListener('change', () => {
+    const file = coverInput.files?.[0] ?? null;
+
+    if (!file) {
+      clearPendingSelection();
+      restoreExistingPreview();
+      return;
+    }
+
+    const validation = validateImageFile(file);
+    if (!validation.valid) {
+      toast.error(validation.message);
+      coverInput.value = '';
+      return;
+    }
+
+    removeCoverImage = false;
+    pendingImageFile = file;
+    revokePreviewUrl(previewObjectUrl);
+    previewObjectUrl = URL.createObjectURL(file);
+    setPreview('pending', previewObjectUrl);
+  });
 
   if (mode === 'edit') {
     titleEl.textContent = 'Edit event';
@@ -86,12 +196,17 @@ export async function initEventForm(container, options = {}) {
         return;
       }
 
+      originalCoverPath = event.coverImagePath;
       populateCategories(categorySelect, event.category);
       form.title.value = event.title;
       form.description.value = event.description ?? '';
       form.location.value = event.location ?? '';
       form.eventDate.value = toDatetimeLocalValue(event.eventDate);
       form.capacity.value = event.capacity;
+
+      if (admin && event.coverImageUrl) {
+        setPreview('existing', event.coverImageUrl);
+      }
     } catch (error) {
       toast.error(error.message || 'Failed to load event.');
       navigate(notFoundHref);
@@ -106,18 +221,56 @@ export async function initEventForm(container, options = {}) {
     const values = readForm(form);
     if (!validateForm(values)) return;
 
+    if (pendingImageFile) {
+      const validation = validateImageFile(pendingImageFile);
+      if (!validation.valid) {
+        toast.error(validation.message);
+        return;
+      }
+    }
+
     setLoading(form, true);
 
     try {
       if (mode === 'edit') {
-        await updateEvent(eventId, values);
+        let coverImagePath = originalCoverPath;
+
+        if (admin) {
+          if (pendingImageFile) {
+            coverImagePath = await saveCoverImage({
+              eventId,
+              pendingImageFile,
+              existingCoverPath: originalCoverPath,
+            });
+          } else if (removeCoverImage && originalCoverPath) {
+            await deleteEventImage(originalCoverPath);
+            coverImagePath = null;
+          }
+        }
+
+        await updateEvent(eventId, {
+          ...values,
+          coverImagePath: admin ? coverImagePath : undefined,
+        });
         toast.info('Event updated.');
+        revokePreviewUrl(previewObjectUrl);
         navigate(successHref ?? `/event/${eventId}`);
         return;
       }
 
       const newEventId = await createEvent(values);
+
+      if (admin && pendingImageFile) {
+        const coverImagePath = await saveCoverImage({
+          eventId: newEventId,
+          pendingImageFile,
+          existingCoverPath: null,
+        });
+        await updateEvent(newEventId, { ...values, coverImagePath });
+      }
+
       toast.info('Event created.');
+      revokePreviewUrl(previewObjectUrl);
       navigate(successHref ?? `/event/${newEventId}`);
     } catch (error) {
       toast.error(error.message || 'Failed to save event.');

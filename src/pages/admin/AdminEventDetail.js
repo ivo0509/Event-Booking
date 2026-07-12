@@ -4,7 +4,7 @@ import { refreshHeaderNav } from '../../components/header/Header.js';
 import { deleteEvent, fetchEventById } from '../../lib/events.js';
 import { fetchUserById } from '../../lib/users.js';
 import { formatEventDate } from '../../lib/format.js';
-import { escapeHtml } from '../../lib/escape.js';
+import { escapeAttr, escapeHtml } from '../../lib/escape.js';
 import { attachModalToBody, detachModal } from '../../lib/modal.js';
 import { navigate } from '../../router/router.js';
 import { toast } from '../../lib/toast.js';
@@ -16,9 +16,20 @@ let deleteModal = null;
 let deleteModalEl = null;
 let currentEventId = null;
 
+function coverImageMarkup(event) {
+  if (!event.coverImageUrl) return '';
+
+  return `
+    <div class="admin-detail-card__cover">
+      <img src="${escapeAttr(event.coverImageUrl)}" alt="${escapeAttr(event.title)} cover image" loading="lazy" />
+    </div>
+  `;
+}
+
 function detailMarkup(event, owner) {
   return `
     <div class="admin-detail-card eb-glass eb-rise eb-delay-2">
+      ${coverImageMarkup(event)}
       <span class="eb-chip mb-3">${escapeHtml(event.category ?? 'Uncategorized')}</span>
       <h2 class="admin-detail-card__title">${escapeHtml(event.title)}</h2>
 

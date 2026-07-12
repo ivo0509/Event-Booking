@@ -1,4 +1,5 @@
 import { supabase } from './supabase.js';
+import { deleteEventImage, getEventImagePublicUrl } from './eventImages.js';
 
 export const EVENTS_PAGE = '/events';
 
@@ -17,6 +18,7 @@ const EVENT_SELECT = `
   event_date,
   capacity,
   owner_id,
+  cover_image_path,
   bookings ( id, position, confirmed, created_at, user_id ),
   event_categories ( id, name, position )
 `;
@@ -45,6 +47,8 @@ function mapEvent(row) {
     eventDate: row.event_date,
     capacity: row.capacity,
     ownerId: row.owner_id,
+    coverImagePath: row.cover_image_path ?? null,
+    coverImageUrl: getEventImagePublicUrl(row.cover_image_path),
     category: row.event_categories?.[0]?.name ?? null,
     categoryId: row.event_categories?.[0]?.id ?? null,
     bookedCount,
@@ -86,6 +90,7 @@ export async function createEvent({
   eventDate,
   capacity,
   category,
+  coverImagePath,
 }) {
   const {
     data: { user },
@@ -104,6 +109,7 @@ export async function createEvent({
       location,
       event_date: eventDate,
       capacity,
+      cover_image_path: coverImagePath ?? null,
     })
     .select('id')
     .single();
@@ -129,17 +135,21 @@ export async function updateEvent(id, {
   eventDate,
   capacity,
   category,
+  coverImagePath,
 }) {
-  const { error } = await supabase
-    .from('events')
-    .update({
-      title,
-      description,
-      location,
-      event_date: eventDate,
-      capacity,
-    })
-    .eq('id', id);
+  const payload = {
+    title,
+    description,
+    location,
+    event_date: eventDate,
+    capacity,
+  };
+
+  if (coverImagePath !== undefined) {
+    payload.cover_image_path = coverImagePath;
+  }
+
+  const { error } = await supabase.from('events').update(payload).eq('id', id);
 
   if (error) throw error;
 
@@ -160,8 +170,14 @@ export async function updateEvent(id, {
 }
 
 export async function deleteEvent(id) {
+  const event = await fetchEventById(id);
+
   const { error } = await supabase.from('events').delete().eq('id', id);
   if (error) throw error;
+
+  if (event?.coverImagePath) {
+    await deleteEventImage(event.coverImagePath).catch(() => {});
+  }
 }
 
 export async function fetchDashboardStats() {

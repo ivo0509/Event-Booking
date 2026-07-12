@@ -40,6 +40,30 @@
             <label class="form-label" for="event-capacity">Capacity</label>
             <input type="number" class="form-control" id="event-capacity" name="capacity" min="1" required />
           </div>
+
+          <div class="col-12 d-none" data-cover-image-section>
+            <label class="form-label" for="event-cover-image">Cover image</label>
+            <input
+              type="file"
+              class="form-control"
+              id="event-cover-image"
+              name="coverImage"
+              accept="image/jpeg,image/png,image/webp"
+              data-cover-image-input
+            />
+            <div class="form-text text-eb-muted">
+              JPEG, PNG, or WebP. Maximum size 5 MB. Admin only.
+            </div>
+
+            <div class="event-form__image-preview d-none" data-cover-image-preview>
+              <img alt="Cover image preview" data-cover-image-preview-img />
+              <div class="event-form__image-preview-actions">
+                <button type="button" class="btn btn-sm btn-outline-danger" data-cover-image-remove>
+                  <i class="bi bi-trash me-1"></i>Delete image
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="event-form__actions">

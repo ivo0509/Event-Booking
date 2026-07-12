@@ -87,6 +87,16 @@ function bookingsPanelMarkup(bookings, currentUserId) {
   `;
 }
 
+function coverImageMarkup(event) {
+  if (!event.coverImageUrl) return '';
+
+  return `
+    <div class="event-detail-card__cover">
+      <img src="${escapeHtml(event.coverImageUrl)}" alt="${escapeHtml(event.title)} cover image" loading="lazy" />
+    </div>
+  `;
+}
+
 function detailMarkup(event, session) {
   const currentUserId = session?.user?.id ?? null;
   const isOwner = event.ownerId === currentUserId;
@@ -118,6 +128,7 @@ function detailMarkup(event, session) {
   return `
     <div class="event-detail-layout">
       <div class="event-detail-card eb-glass eb-rise eb-delay-2">
+        ${coverImageMarkup(event)}
         <span class="eb-chip mb-3">${escapeHtml(event.category ?? 'Uncategorized')}</span>
         <h1 class="event-detail-card__title">${escapeHtml(event.title)}</h1>
 
