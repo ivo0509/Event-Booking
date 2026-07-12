@@ -1,7 +1,10 @@
-<header class="site-header border-bottom bg-body-tertiary">
-  <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg">
     <div class="container">
-      <a class="navbar-brand fw-semibold" href="/" data-route>Event Booking</a>
+      <a class="navbar-brand" href="/" data-route>
+        <span class="site-header__logo"><i class="bi bi-ticket-perforated"></i></span>
+        <span class="site-header__brand-text">Event<span class="eb-gradient-text">Booking</span></span>
+      </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -11,15 +14,12 @@
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span class="navbar-toggler-icon"></span>
+        <i class="bi bi-list"></i>
       </button>
       <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-1">
           <li class="nav-item">
             <a class="nav-link" href="/" data-route>Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login" data-route>Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/dashboard" data-route>Dashboard</a>
@@ -30,7 +30,12 @@
               href="/projects/demo/events"
               data-route
               data-nav-match="project-events"
-            >Sample Events</a>
+            >Events</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn-eb site-header__login" href="/login" data-route>
+              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            </a>
           </li>
         </ul>
       </div>

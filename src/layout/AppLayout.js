@@ -1,6 +1,7 @@
 import { renderHeader } from '../components/header/Header.js';
 import { renderFooter } from '../components/footer/Footer.js';
 import { createPageContentElement } from '../components/page-content/PageContent.js';
+import { mountLiveBackground } from '../components/live-background/LiveBackground.js';
 import { initRouter } from '../router/router.js';
 
 export function renderLayout(root) {
@@ -14,6 +15,7 @@ export function renderLayout(root) {
 
   root.replaceChildren(headerMount, pageContent, footerMount);
 
+  mountLiveBackground(document.body);
   renderHeader(headerMount);
   renderFooter(footerMount);
   initRouter(pageContent);

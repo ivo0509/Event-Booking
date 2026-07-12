@@ -1,6 +1,35 @@
 <section class="dashboard-page">
-  <div class="container py-5">
-    <h1 class="h2 mb-3">Dashboard</h1>
-    <p class="text-muted">Dashboard page placeholder.</p>
+  <div class="container">
+    <div class="dashboard-head eb-rise eb-delay-1">
+      <div>
+        <span class="eb-chip mb-3"><i class="bi bi-grid-1x2"></i> Overview</span>
+        <h1 class="dashboard-head__title">Your dashboard</h1>
+        <p class="text-eb-muted mb-0">A snapshot of your events, bookings and activity.</p>
+      </div>
+      <a href="/projects/demo/events" data-route class="btn-eb">
+        <i class="bi bi-plus-lg me-2"></i>Manage events
+      </a>
+    </div>
+
+    <div class="row g-4 dashboard-stats" data-stats></div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-12 col-lg-7">
+        <div class="dashboard-panel eb-glass eb-rise eb-delay-3">
+          <div class="dashboard-panel__head">
+            <h2 class="dashboard-panel__title"><i class="bi bi-calendar4-week me-2"></i>Upcoming events</h2>
+          </div>
+          <ul class="dashboard-list" data-events></ul>
+        </div>
+      </div>
+      <div class="col-12 col-lg-5">
+        <div class="dashboard-panel eb-glass eb-rise eb-delay-4">
+          <div class="dashboard-panel__head">
+            <h2 class="dashboard-panel__title"><i class="bi bi-activity me-2"></i>Recent activity</h2>
+          </div>
+          <ul class="dashboard-activity" data-activity></ul>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

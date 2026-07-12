@@ -1,3 +1,104 @@
-.home-page h1 {
-  color: var(--bs-body-color);
+.home-page {
+  padding-block: clamp(3rem, 8vw, 6.5rem) 5rem;
+}
+
+/* Hero */
+.home-hero {
+  max-width: 860px;
+  margin: 0 auto;
+  padding-block: 1rem 3.5rem;
+}
+
+.home-hero__title {
+  font-size: clamp(2.5rem, 6.5vw, 4.75rem);
+  font-weight: 700;
+  line-height: 1.04;
+  margin-block: 1.4rem 1.25rem;
+}
+
+.home-hero__lead {
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  max-width: 620px;
+  margin: 0 auto 2.25rem;
+}
+
+.home-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3.25rem;
+}
+
+.home-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(1.5rem, 6vw, 4rem);
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-stat__num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.home-stat__label {
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+/* Sections */
+.home-section {
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+}
+
+.home-section__title {
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  font-weight: 600;
+}
+
+/* Category / feature cards */
+.home-card {
+  height: 100%;
+  padding: 1.75rem;
+}
+
+.home-card__icon {
+  margin-bottom: 1.1rem;
+}
+
+.home-card__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.home-card__text {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Bottom CTA */
+.home-cta {
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding: clamp(2.5rem, 6vw, 4rem);
+}
+
+.home-cta__title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 600;
+}
+
+.home-cta__lead {
+  max-width: 520px;
+  margin: 0.75rem auto 2rem;
+  font-size: 1.05rem;
 }

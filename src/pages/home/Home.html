@@ -1,5 +1,70 @@
 <section class="home-page">
-  <div class="container py-5">
-    <h1 class="display-6">Hello world</h1>
+  <div class="container">
+    <!-- Hero -->
+    <div class="home-hero text-center">
+      <span class="eb-chip eb-rise eb-delay-1">
+        <i class="bi bi-stars"></i> Discover · Book · Experience
+      </span>
+
+      <h1 class="home-hero__title eb-rise eb-delay-2">
+        Book unforgettable <span class="eb-gradient-text">events</span>
+        <br class="d-none d-md-block" />
+        in a few taps
+      </h1>
+
+      <p class="home-hero__lead text-eb-muted eb-rise eb-delay-3">
+        Concerts, sports, conferences and workshops — all in one place. Reserve your
+        seat, track your bookings and never miss a moment.
+      </p>
+
+      <div class="home-hero__cta eb-rise eb-delay-4">
+        <a href="/login" data-route class="btn-eb btn-eb-lg">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login to book a event
+        </a>
+        <a href="/projects/demo/events" data-route class="btn-eb-outline">
+          <i class="bi bi-calendar4-event me-2"></i>Browse events
+        </a>
+      </div>
+
+      <div class="home-stats eb-rise eb-delay-4">
+        <div class="home-stat">
+          <span class="home-stat__num eb-gradient-text">4</span>
+          <span class="home-stat__label text-eb-muted">Live events</span>
+        </div>
+        <div class="home-stat">
+          <span class="home-stat__num eb-gradient-text">45+</span>
+          <span class="home-stat__label text-eb-muted">Seats booked</span>
+        </div>
+        <div class="home-stat">
+          <span class="home-stat__num eb-gradient-text">4</span>
+          <span class="home-stat__label text-eb-muted">Categories</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="home-section">
+      <div class="text-center mb-5">
+        <h2 class="home-section__title">Something for everyone</h2>
+        <p class="text-eb-muted mb-0">Explore events across our most popular categories.</p>
+      </div>
+      <div class="row g-4" data-categories></div>
+    </div>
+
+    <!-- Features -->
+    <div class="home-section">
+      <div class="row g-4" data-features></div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="home-cta eb-glass text-center">
+      <h2 class="home-cta__title">Ready to grab your seat?</h2>
+      <p class="text-eb-muted home-cta__lead">
+        Sign in to reserve tickets, manage your bookings and organize your own events.
+      </p>
+      <a href="/login" data-route class="btn-eb btn-eb-lg">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Login to book a event
+      </a>
+    </div>
   </div>
 </section>

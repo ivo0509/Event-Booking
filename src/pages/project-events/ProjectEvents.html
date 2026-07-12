@@ -1,7 +1,13 @@
 <section class="project-events-page">
-  <div class="container py-5">
-    <h1 class="h2 mb-3">Project Events</h1>
-    <p class="text-muted mb-2">Project ID: <span data-project-id></span></p>
-    <p class="text-muted mb-0">Events page placeholder.</p>
+  <div class="container">
+    <div class="project-events__head eb-rise eb-delay-1">
+      <span class="eb-chip mb-3">
+        <i class="bi bi-collection"></i> Project <span data-project-id></span>
+      </span>
+      <h1 class="project-events__title">Events</h1>
+      <p class="text-eb-muted mb-0">Browse and manage the events in this project.</p>
+    </div>
+
+    <div class="row g-4" data-events-grid></div>
   </div>
 </section>

@@ -88,11 +88,16 @@ async function renderCurrentRoute() {
 
   if (!match) {
     contentContainer.innerHTML = `
-      <div class="container py-5">
-        <div class="alert alert-warning" role="alert">
-          Page not found.
+      <section class="container text-center" style="padding-block: clamp(4rem, 12vw, 8rem);">
+        <div class="eb-icon-badge mx-auto mb-4" style="width:4rem;height:4rem;font-size:2rem;">
+          <i class="bi bi-compass"></i>
         </div>
-      </div>
+        <h1 class="display-5 fw-bold mb-2">Page not found</h1>
+        <p class="text-eb-muted mb-4">The page you're looking for doesn't exist or has moved.</p>
+        <a href="/" data-route class="btn-eb btn-eb-lg">
+          <i class="bi bi-house me-2"></i>Back to home
+        </a>
+      </section>
     `;
     document.title = 'Not Found — Event Booking';
     return;
