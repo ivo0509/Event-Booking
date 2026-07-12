@@ -82,6 +82,26 @@ h5,
   z-index: 1;
 }
 
+.modal {
+  z-index: 1060;
+}
+
+.modal-backdrop {
+  z-index: 1050;
+}
+
+.modal-content.eb-glass {
+  background: var(--eb-surface-strong);
+  border: 1px solid var(--eb-border);
+  color: var(--eb-text);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.modal-content .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 /* ---------- Shared visual language ---------- */
 
 .eb-gradient-text {

@@ -14,8 +14,24 @@ const routes = [
     requiresAuth: true,
   },
   {
-    path: '/projects/:id/events',
-    page: () => import('../pages/project-events/ProjectEvents.js'),
+    path: '/events',
+    page: () => import('../pages/events/EventsList.js'),
+    requiresAuth: true,
+  },
+  {
+    path: '/event/add',
+    page: () => import('../pages/event-add/EventAdd.js'),
+    requiresAuth: true,
+  },
+  {
+    path: '/event/:id/edit',
+    page: () => import('../pages/event-edit/EventEdit.js'),
+    requiresAuth: true,
+  },
+  {
+    path: '/event/:id',
+    page: () => import('../pages/event-detail/EventDetail.js'),
+    requiresAuth: true,
   },
 ];
 

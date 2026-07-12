@@ -11,8 +11,11 @@ function setActiveNavLink() {
     const href = link.getAttribute('href');
     let isActive = href === currentPath;
 
-    if (link.dataset.navMatch === 'project-events') {
-      isActive = /^\/projects\/[^/]+\/events$/.test(currentPath);
+    if (link.dataset.navMatch === 'events') {
+      isActive =
+        currentPath === '/events' ||
+        currentPath === '/event/add' ||
+        /^\/event\/[^/]+(\/edit)?$/.test(currentPath);
     }
 
     if (link.dataset.navHome && currentPath === '/dashboard') {
