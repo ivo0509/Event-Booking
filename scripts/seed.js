@@ -7,7 +7,7 @@ const SAMPLE_USERS = [
   { email: 'peter@gmail.com', password: 'pass123', name: 'Peter' },
 ];
 
-const CATEGORY_NAMES = ['Concert', 'Sports', 'Conference', 'Workshop'];
+const CATEGORY_NAMES = ['Music', 'Sports', 'Technology', 'Education', 'Business', 'Entertainment'];
 
 const SAMPLE_EVENTS = [
   {
@@ -17,7 +17,8 @@ const SAMPLE_EVENTS = [
     daysFromNow: 30,
     capacity: 50,
     ownerEmail: 'steve@gmail.com',
-    category: 'Concert',
+    category: 'Music',
+    ticketPrice: 45,
     bookingCount: 12,
   },
   {
@@ -28,6 +29,7 @@ const SAMPLE_EVENTS = [
     capacity: 100,
     ownerEmail: 'maria@gmail.com',
     category: 'Sports',
+    ticketPrice: 25,
     bookingCount: 11,
   },
   {
@@ -37,7 +39,8 @@ const SAMPLE_EVENTS = [
     daysFromNow: 60,
     capacity: 80,
     ownerEmail: 'peter@gmail.com',
-    category: 'Conference',
+    category: 'Technology',
+    ticketPrice: 120,
     bookingCount: 10,
   },
   {
@@ -47,7 +50,8 @@ const SAMPLE_EVENTS = [
     daysFromNow: 21,
     capacity: 40,
     ownerEmail: 'steve@gmail.com',
-    category: 'Workshop',
+    category: 'Education',
+    ticketPrice: 55,
     bookingCount: 12,
   },
 ];
@@ -177,6 +181,7 @@ async function seedEvents(supabase, userIdsByEmail) {
         location: eventSeed.location,
         event_date: eventDate,
         capacity: eventSeed.capacity,
+        ticket_price: eventSeed.ticketPrice ?? 0,
       })
       .select('id')
       .single();

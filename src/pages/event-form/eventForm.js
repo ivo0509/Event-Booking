@@ -42,6 +42,7 @@ function readForm(form) {
     category: form.category.value,
     eventDate: fromDatetimeLocalValue(form.eventDate.value),
     capacity: Number(form.capacity.value),
+    ticketPrice: Number(form.ticketPrice.value),
   };
 }
 
@@ -53,6 +54,11 @@ function validateForm(values) {
 
   if (!Number.isInteger(values.capacity) || values.capacity < 1) {
     toast.error('Capacity must be at least 1.');
+    return false;
+  }
+
+  if (Number.isNaN(values.ticketPrice) || values.ticketPrice < 0) {
+    toast.error('Ticket price must be 0 or greater.');
     return false;
   }
 
@@ -203,6 +209,7 @@ export async function initEventForm(container, options = {}) {
       form.location.value = event.location ?? '';
       form.eventDate.value = toDatetimeLocalValue(event.eventDate);
       form.capacity.value = event.capacity;
+      form.ticketPrice.value = event.ticketPrice ?? 0;
 
       if (admin && event.coverImageUrl) {
         setPreview('existing', event.coverImageUrl);

@@ -17,6 +17,43 @@
   margin-bottom: 0.35rem;
 }
 
+.events-toolbar {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  margin-bottom: 1.5rem;
+}
+
+.events-toolbar .form-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--eb-muted);
+  margin-bottom: 0.35rem;
+}
+
+.events-toolbar__search {
+  margin-bottom: 1.25rem;
+}
+
+.events-toolbar__search .input-group-text {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--eb-border);
+  color: var(--eb-muted);
+}
+
+.events-toolbar__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--eb-border);
+}
+
+.events-toolbar__count {
+  font-size: 0.9rem;
+}
+
 .events-table-wrap {
   padding: 0;
   overflow: hidden;
@@ -54,6 +91,17 @@
 
 .events-table__date {
   white-space: nowrap;
+}
+
+.events-table__category {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--eb-cyan);
+}
+
+.events-table__price {
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .events-table__actions {

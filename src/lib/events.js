@@ -4,10 +4,12 @@ import { deleteEventImage, getEventImagePublicUrl } from './eventImages.js';
 export const EVENTS_PAGE = '/events';
 
 export const EVENT_CATEGORIES = [
-  { name: 'Concert', icon: 'bi-music-note-beamed', color: 'var(--eb-violet)' },
+  { name: 'Music', icon: 'bi-music-note-beamed', color: 'var(--eb-violet)' },
   { name: 'Sports', icon: 'bi-trophy', color: 'var(--eb-cyan)' },
-  { name: 'Conference', icon: 'bi-mic', color: 'var(--eb-indigo)' },
-  { name: 'Workshop', icon: 'bi-easel', color: 'var(--eb-pink)' },
+  { name: 'Technology', icon: 'bi-cpu', color: 'var(--eb-indigo)' },
+  { name: 'Education', icon: 'bi-mortarboard', color: 'var(--eb-pink)' },
+  { name: 'Business', icon: 'bi-briefcase', color: '#8b7cf8' },
+  { name: 'Entertainment', icon: 'bi-film', color: 'var(--eb-cyan)' },
 ];
 
 const EVENT_SELECT = `
@@ -17,6 +19,8 @@ const EVENT_SELECT = `
   location,
   event_date,
   capacity,
+  ticket_price,
+  created_at,
   owner_id,
   cover_image_path,
   bookings ( id, position, confirmed, created_at, user_id ),
@@ -46,6 +50,8 @@ function mapEvent(row) {
     location: row.location,
     eventDate: row.event_date,
     capacity: row.capacity,
+    ticketPrice: Number(row.ticket_price ?? 0),
+    createdAt: row.created_at,
     ownerId: row.owner_id,
     coverImagePath: row.cover_image_path ?? null,
     coverImageUrl: getEventImagePublicUrl(row.cover_image_path),
@@ -91,6 +97,7 @@ export async function createEvent({
   capacity,
   category,
   coverImagePath,
+  ticketPrice = 0,
 }) {
   const {
     data: { user },
@@ -109,6 +116,7 @@ export async function createEvent({
       location,
       event_date: eventDate,
       capacity,
+      ticket_price: ticketPrice,
       cover_image_path: coverImagePath ?? null,
     })
     .select('id')
@@ -136,6 +144,7 @@ export async function updateEvent(id, {
   capacity,
   category,
   coverImagePath,
+  ticketPrice,
 }) {
   const payload = {
     title,
@@ -144,6 +153,10 @@ export async function updateEvent(id, {
     event_date: eventDate,
     capacity,
   };
+
+  if (ticketPrice !== undefined) {
+    payload.ticket_price = ticketPrice;
+  }
 
   if (coverImagePath !== undefined) {
     payload.cover_image_path = coverImagePath;

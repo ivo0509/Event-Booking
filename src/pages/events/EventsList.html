@@ -4,30 +4,118 @@
       <div>
         <span class="eb-chip mb-3"><i class="bi bi-calendar4-event"></i> Events</span>
         <h1 class="events-head__title">All events</h1>
-        <p class="text-eb-muted mb-0">Browse, view and manage available events.</p>
+        <p class="text-eb-muted mb-0">Browse, search and filter available events.</p>
       </div>
       <a href="/event/add" data-route class="btn-eb">
         <i class="bi bi-plus-lg me-2"></i>Create event
       </a>
     </div>
 
-    <div class="events-table-wrap eb-glass eb-rise eb-delay-2">
+    <div class="events-toolbar eb-glass eb-rise eb-delay-2">
+      <div class="events-toolbar__search">
+        <label class="form-label" for="events-search">Search events</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+          <input
+            type="search"
+            class="form-control"
+            id="events-search"
+            placeholder="Search by title, location or description"
+            data-filter-search
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <div class="row g-3 events-toolbar__filters">
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-category">Category</label>
+          <select class="form-select" id="events-filter-category" data-filter-category>
+            <option value="">All categories</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-status">Status</label>
+          <select class="form-select" id="events-filter-status" data-filter-status>
+            <option value="">All statuses</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+            <option value="full">Full</option>
+            <option value="available">Available</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-date-from">Date from</label>
+          <input type="date" class="form-control" id="events-filter-date-from" data-filter-date-from />
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-date-to">Date to</label>
+          <input type="date" class="form-control" id="events-filter-date-to" data-filter-date-to />
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-location">Location</label>
+          <input
+            type="text"
+            class="form-control"
+            id="events-filter-location"
+            placeholder="Filter by location"
+            data-filter-location
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-available">Available places</label>
+          <select class="form-select" id="events-filter-available" data-filter-available>
+            <option value="">Any availability</option>
+            <option value="1">1+ places</option>
+            <option value="5">5+ places</option>
+            <option value="10">10+ places</option>
+            <option value="20">20+ places</option>
+          </select>
+        </div>
+
+        <div class="col-md-4 col-lg-2">
+          <label class="form-label" for="events-filter-sort">Sort by</label>
+          <select class="form-select" id="events-filter-sort" data-filter-sort>
+            <option value="date-asc">Nearest event date</option>
+            <option value="created-desc">Newest events</option>
+            <option value="price-asc">Ticket price</option>
+            <option value="available-desc">Available places</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="events-toolbar__footer">
+        <button type="button" class="btn-eb-outline btn-sm" data-filter-clear>
+          <i class="bi bi-x-circle me-1"></i>Clear filters
+        </button>
+        <span class="text-eb-muted events-toolbar__count" data-events-count></span>
+      </div>
+    </div>
+
+    <div class="events-table-wrap eb-glass eb-rise eb-delay-3">
       <div class="table-responsive">
         <table class="table events-table align-middle mb-0">
           <thead>
             <tr>
               <th>Title</th>
+              <th>Category</th>
               <th>Description</th>
               <th>Location</th>
               <th>Event Date</th>
-              <th>Capacity</th>
-              <th>Available Places</th>
+              <th>Price</th>
+              <th>Available</th>
               <th class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody data-events-table>
             <tr>
-              <td colspan="7" class="text-center text-eb-muted py-5">
+              <td colspan="8" class="text-center text-eb-muted py-5">
                 <span class="spinner-border spinner-border-sm me-2"></span>Loading events…
               </td>
             </tr>

@@ -19,6 +19,17 @@ export function toDatetimeLocalValue(isoDate) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+export function formatTicketPrice(price) {
+  const value = Number(price ?? 0);
+  if (!value) return 'Free';
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
 export function fromDatetimeLocalValue(value) {
   if (!value) return null;
   return new Date(value).toISOString();
