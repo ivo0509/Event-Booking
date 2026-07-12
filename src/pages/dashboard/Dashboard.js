@@ -1,81 +1,83 @@
 import template from './Dashboard.html?raw';
 import './Dashboard.css';
 import { refreshHeaderNav } from '../../components/header/Header.js';
+import {
+  EVENT_CATEGORIES,
+  EVENTS_PAGE,
+  fetchDashboardStats,
+} from '../../lib/events.js';
+import { toast } from '../../lib/toast.js';
 
 export const title = 'Dashboard';
 export { template };
 
-const STATS = [
-  { icon: 'bi-calendar-event', num: '4', label: 'Events', color: 'var(--eb-violet)' },
-  { icon: 'bi-ticket-perforated', num: '45', label: 'Bookings', color: 'var(--eb-cyan)' },
-  { icon: 'bi-check2-circle', num: '31', label: 'Confirmed', color: 'var(--eb-pink)' },
-  { icon: 'bi-people', num: '3', label: 'Attendees', color: 'var(--eb-indigo)' },
-];
+function totalEventsMarkup(total) {
+  return `
+    <a href="${EVENTS_PAGE}" data-route class="dashboard-total__card eb-glass eb-glass-hover">
+      <div class="dashboard-total__content">
+        <div class="eb-icon-badge dashboard-total__icon">
+          <i class="bi bi-calendar-event"></i>
+        </div>
+        <div>
+          <div class="dashboard-total__num eb-gradient-text">${total}</div>
+          <div class="dashboard-total__label text-eb-muted">Total events</div>
+        </div>
+      </div>
+      <span class="dashboard-total__link">
+        View all events <i class="bi bi-arrow-right"></i>
+      </span>
+    </a>
+  `;
+}
 
-const EVENTS = [
-  { icon: 'bi-music-note-beamed', title: 'Summer Rock Concert', meta: 'Central Park Arena', badge: '12 booked' },
-  { icon: 'bi-trophy', title: 'City Marathon', meta: 'Downtown Riverfront', badge: '11 booked' },
-  { icon: 'bi-mic', title: 'Tech Leaders Conference', meta: 'Convention Center Hall B', badge: '10 booked' },
-  { icon: 'bi-easel', title: 'UI Design Workshop', meta: 'Creative Hub Studio 3', badge: '12 booked' },
-];
-
-const ACTIVITY = [
-  { text: 'New booking confirmed for Summer Rock Concert', time: '2h ago' },
-  { text: 'City Marathon reached 11 bookings', time: '5h ago' },
-  { text: 'Workshop capacity updated to 40 seats', time: '1d ago' },
-  { text: 'Tech Leaders Conference schedule published', time: '2d ago' },
-];
-
-function statMarkup({ icon, num, label, color }, index) {
+function categoryStatMarkup({ name, icon, color }, count, index) {
   return `
     <div class="col-6 col-lg-3">
-      <div class="dashboard-stat eb-glass eb-glass-hover eb-rise eb-delay-${(index % 4) + 1}">
+      <div class="dashboard-stat eb-glass eb-rise eb-delay-${(index % 4) + 1}">
         <div class="eb-icon-badge dashboard-stat__icon" style="background: ${color};">
           <i class="bi ${icon}"></i>
         </div>
         <div>
-          <div class="dashboard-stat__num">${num}</div>
-          <div class="dashboard-stat__label text-eb-muted">${label}</div>
+          <div class="dashboard-stat__num">${count}</div>
+          <div class="dashboard-stat__label text-eb-muted">${name}</div>
         </div>
       </div>
     </div>
   `;
 }
 
-function eventMarkup({ icon, title: eventTitle, meta, badge }) {
-  return `
-    <li class="dashboard-list__item">
-      <span class="dashboard-list__icon"><i class="bi ${icon}"></i></span>
-      <div class="dashboard-list__body">
-        <p class="dashboard-list__title">${eventTitle}</p>
-        <p class="dashboard-list__meta text-eb-muted"><i class="bi bi-geo-alt me-1"></i>${meta}</p>
-      </div>
-      <span class="dashboard-badge">${badge}</span>
-    </li>
-  `;
-}
+async function loadDashboard(container) {
+  const totalEl = container.querySelector('[data-total-events]');
+  const categoriesEl = container.querySelector('[data-category-stats]');
 
-function activityMarkup({ text, time }) {
-  return `
-    <li class="dashboard-activity__item">
-      <span class="dashboard-activity__dot"></span>
-      <div>
-        <div>${text}</div>
-        <div class="dashboard-activity__time">${time}</div>
-      </div>
-    </li>
-  `;
+  try {
+    const { totalEvents, categoryCounts } = await fetchDashboardStats();
+
+    if (totalEl) {
+      totalEl.innerHTML = totalEventsMarkup(totalEvents);
+    }
+
+    if (categoriesEl) {
+      categoriesEl.innerHTML = EVENT_CATEGORIES.map((category, index) =>
+        categoryStatMarkup(category, categoryCounts[category.name] ?? 0, index),
+      ).join('');
+    }
+  } catch (error) {
+    if (totalEl) {
+      totalEl.innerHTML = `
+        <div class="dashboard-total__card eb-glass">
+          <p class="text-eb-muted mb-0">Could not load event stats.</p>
+        </div>
+      `;
+    }
+    if (categoriesEl) {
+      categoriesEl.innerHTML = '';
+    }
+    toast.error(error.message || 'Failed to load dashboard data.');
+  }
 }
 
 export function init(container) {
-  const statsEl = container.querySelector('[data-stats]');
-  if (statsEl) statsEl.innerHTML = STATS.map(statMarkup).join('');
-
-  const eventsEl = container.querySelector('[data-events]');
-  if (eventsEl) eventsEl.innerHTML = EVENTS.map(eventMarkup).join('');
-
-  const activityEl = container.querySelector('[data-activity]');
-  if (activityEl) activityEl.innerHTML = ACTIVITY.map(activityMarkup).join('');
-
+  loadDashboard(container);
   refreshHeaderNav();
 }

@@ -2,32 +2,24 @@
   <div class="container">
     <div class="dashboard-head eb-rise eb-delay-1">
       <div>
-        <span class="eb-chip mb-3"><i class="bi bi-grid-1x2"></i> Overview</span>
+        <span class="eb-chip mb-3"><i class="bi bi-house-door"></i> Home</span>
         <h1 class="dashboard-head__title">Your dashboard</h1>
-        <p class="text-eb-muted mb-0">A snapshot of your events, bookings and activity.</p>
+        <p class="text-eb-muted mb-0">Overview of your events and categories.</p>
       </div>
-      <a href="/projects/demo/events" data-route class="btn-eb">
-        <i class="bi bi-plus-lg me-2"></i>Manage events
-      </a>
     </div>
 
-    <div class="row g-4 dashboard-stats" data-stats></div>
-
-    <div class="row g-4 mt-1">
-      <div class="col-12 col-lg-7">
-        <div class="dashboard-panel eb-glass eb-rise eb-delay-3">
-          <div class="dashboard-panel__head">
-            <h2 class="dashboard-panel__title"><i class="bi bi-calendar4-week me-2"></i>Upcoming events</h2>
-          </div>
-          <ul class="dashboard-list" data-events></ul>
-        </div>
+    <div class="dashboard-total eb-rise eb-delay-2" data-total-events>
+      <div class="dashboard-total__loading text-eb-muted">
+        <span class="spinner-border spinner-border-sm me-2"></span>Loading events…
       </div>
-      <div class="col-12 col-lg-5">
-        <div class="dashboard-panel eb-glass eb-rise eb-delay-4">
-          <div class="dashboard-panel__head">
-            <h2 class="dashboard-panel__title"><i class="bi bi-activity me-2"></i>Recent activity</h2>
-          </div>
-          <ul class="dashboard-activity" data-activity></ul>
+    </div>
+
+    <div class="dashboard-section eb-rise eb-delay-3">
+      <h2 class="dashboard-section__title">Events by category</h2>
+      <p class="text-eb-muted dashboard-section__lead">Concerts, sports, conferences and workshops you manage.</p>
+      <div class="row g-4" data-category-stats>
+        <div class="col-12 text-eb-muted">
+          <span class="spinner-border spinner-border-sm me-2"></span>Loading categories…
         </div>
       </div>
     </div>

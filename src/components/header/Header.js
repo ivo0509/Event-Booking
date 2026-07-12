@@ -15,11 +15,35 @@ function setActiveNavLink() {
       isActive = /^\/projects\/[^/]+\/events$/.test(currentPath);
     }
 
+    if (link.dataset.navHome && currentPath === '/dashboard') {
+      isActive = true;
+    }
+
     link.classList.toggle('active', isActive);
   });
 }
 
+function updateNavForAuth(session) {
+  const homeLink = document.querySelector('[data-nav-home]');
+  const dashboardItem = document.querySelector('[data-nav-dashboard]');
+
+  if (session?.user) {
+    if (homeLink) {
+      homeLink.setAttribute('href', '/dashboard');
+      homeLink.textContent = 'Home';
+    }
+    dashboardItem?.classList.add('d-none');
+  } else {
+    if (homeLink) {
+      homeLink.setAttribute('href', '/');
+      homeLink.textContent = 'Home';
+    }
+    dashboardItem?.classList.remove('d-none');
+  }
+}
+
 function renderAuthSlot(session) {
+  updateNavForAuth(session);
   const slot = document.querySelector('[data-auth-slot]');
   if (!slot) return;
 
@@ -56,7 +80,15 @@ export function renderHeader(container) {
   setActiveNavLink();
   window.addEventListener('popstate', setActiveNavLink);
   window.addEventListener('authchange', handleAuthChange);
-  getSession().then(renderAuthSlot).catch(() => renderAuthSlot(null));
+  getSession()
+    .then((session) => {
+      renderAuthSlot(session);
+      setActiveNavLink();
+    })
+    .catch(() => {
+      renderAuthSlot(null);
+      setActiveNavLink();
+    });
 }
 
 export function refreshHeaderNav() {

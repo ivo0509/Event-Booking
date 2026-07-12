@@ -122,6 +122,11 @@ async function renderCurrentRoute() {
     return;
   }
 
+  if (match.route.path === '/' && session) {
+    navigate('/dashboard', true);
+    return;
+  }
+
   if (currentPageModule?.destroy) {
     currentPageModule.destroy();
   }
