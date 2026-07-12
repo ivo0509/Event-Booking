@@ -17,12 +17,25 @@ const EVENT_SELECT = `
   event_date,
   capacity,
   owner_id,
-  bookings ( id ),
+  bookings ( id, position, confirmed, created_at, user_id ),
   event_categories ( id, name, position )
 `;
 
+function mapBookings(rows = []) {
+  return rows
+    .map((booking) => ({
+      id: booking.id,
+      position: booking.position,
+      confirmed: booking.confirmed,
+      createdAt: booking.created_at,
+      userId: booking.user_id,
+    }))
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
 function mapEvent(row) {
-  const bookedCount = row.bookings?.length ?? 0;
+  const bookings = mapBookings(row.bookings);
+  const bookedCount = bookings.length;
 
   return {
     id: row.id,
@@ -36,6 +49,7 @@ function mapEvent(row) {
     categoryId: row.event_categories?.[0]?.id ?? null,
     bookedCount,
     availablePlaces: Math.max(0, row.capacity - bookedCount),
+    bookings,
   };
 }
 
