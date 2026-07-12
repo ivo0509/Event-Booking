@@ -1,0 +1,43 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="admin-head eb-rise eb-delay-1">
+      <a href="/admin/users" data-route class="event-form__back text-eb-muted mb-3 d-inline-block" data-back-link>
+        <i class="bi bi-arrow-left me-1"></i>Back to users
+      </a>
+      <span class="eb-chip mb-3"><i class="bi bi-shield-lock"></i> Admin</span>
+      <h1 class="admin-head__title" data-form-title>Edit user</h1>
+      <p class="text-eb-muted mb-0" data-form-subtitle>Update user profile and role.</p>
+    </div>
+
+    <div class="admin-form-card eb-glass eb-rise eb-delay-2">
+      <form class="admin-user-form" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label" for="user-email">Email</label>
+            <input type="email" class="form-control" id="user-email" name="email" readonly />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label" for="user-role">Role</label>
+            <select class="form-select" id="user-role" name="role" required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label" for="user-full-name">Full name</label>
+            <input type="text" class="form-control" id="user-full-name" name="fullName" />
+          </div>
+        </div>
+
+        <div class="admin-form-actions">
+          <a href="/admin/users" data-route class="btn-eb-outline" data-cancel-link>Cancel</a>
+          <button type="submit" class="btn-eb" data-submit-btn>
+            <i class="bi bi-check2 me-2"></i>Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

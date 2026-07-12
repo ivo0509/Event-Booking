@@ -52,11 +52,25 @@ function validateForm(values) {
   return true;
 }
 
-export async function initEventForm(container, { mode, eventId }) {
+export async function initEventForm(container, options = {}) {
+  const {
+    mode,
+    eventId,
+    backHref = '/events',
+    cancelHref = '/events',
+    successHref,
+    notFoundHref = '/events',
+  } = options;
+
   const form = container.querySelector('.event-form');
   const titleEl = container.querySelector('[data-form-title]');
   const subtitleEl = container.querySelector('[data-form-subtitle]');
   const categorySelect = container.querySelector('[data-category-select]');
+  const backLink = container.querySelector('[data-back-link]');
+  const cancelLink = container.querySelector('[data-cancel-link]');
+
+  if (backLink) backLink.setAttribute('href', backHref);
+  if (cancelLink) cancelLink.setAttribute('href', cancelHref);
 
   if (mode === 'edit') {
     titleEl.textContent = 'Edit event';
@@ -68,7 +82,7 @@ export async function initEventForm(container, { mode, eventId }) {
       const event = await fetchEventById(eventId);
       if (!event) {
         toast.error('Event not found.');
-        navigate('/events');
+        navigate(notFoundHref);
         return;
       }
 
@@ -80,7 +94,7 @@ export async function initEventForm(container, { mode, eventId }) {
       form.capacity.value = event.capacity;
     } catch (error) {
       toast.error(error.message || 'Failed to load event.');
-      navigate('/events');
+      navigate(notFoundHref);
       return;
     }
   } else {
@@ -98,13 +112,13 @@ export async function initEventForm(container, { mode, eventId }) {
       if (mode === 'edit') {
         await updateEvent(eventId, values);
         toast.info('Event updated.');
-        navigate(`/event/${eventId}`);
+        navigate(successHref ?? `/event/${eventId}`);
         return;
       }
 
       const newEventId = await createEvent(values);
       toast.info('Event created.');
-      navigate(`/event/${newEventId}`);
+      navigate(successHref ?? `/event/${newEventId}`);
     } catch (error) {
       toast.error(error.message || 'Failed to save event.');
     } finally {

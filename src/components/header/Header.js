@@ -1,6 +1,6 @@
 import template from './Header.html?raw';
 import './Header.css';
-import { getSession, signOut } from '../../lib/auth.js';
+import { getSession, getCurrentUserProfile, signOut } from '../../lib/auth.js';
 import { toast } from '../../lib/toast.js';
 
 function setActiveNavLink() {
@@ -18,12 +18,22 @@ function setActiveNavLink() {
         /^\/event\/[^/]+(\/edit)?$/.test(currentPath);
     }
 
+    if (link.dataset.navMatch === 'admin') {
+      isActive = currentPath.startsWith('/admin');
+    }
+
     if (link.dataset.navHome && currentPath === '/dashboard') {
       isActive = true;
     }
 
     link.classList.toggle('active', isActive);
   });
+}
+
+function updateAdminNav(profile) {
+  const adminItem = document.querySelector('[data-nav-admin]');
+  if (!adminItem) return;
+  adminItem.classList.toggle('d-none', profile?.role !== 'admin');
 }
 
 function updateNavForAuth(session) {
@@ -45,8 +55,9 @@ function updateNavForAuth(session) {
   }
 }
 
-function renderAuthSlot(session) {
+function renderAuthSlot(session, profile = null) {
   updateNavForAuth(session);
+  updateAdminNav(profile);
   const slot = document.querySelector('[data-auth-slot]');
   if (!slot) return;
 
@@ -74,7 +85,7 @@ function renderAuthSlot(session) {
 }
 
 function handleAuthChange(event) {
-  renderAuthSlot(event.detail.session);
+  renderAuthSlot(event.detail.session, event.detail.profile);
   setActiveNavLink();
 }
 
@@ -84,12 +95,13 @@ export function renderHeader(container) {
   window.addEventListener('popstate', setActiveNavLink);
   window.addEventListener('authchange', handleAuthChange);
   getSession()
-    .then((session) => {
-      renderAuthSlot(session);
+    .then(async (session) => {
+      const profile = session ? await getCurrentUserProfile().catch(() => null) : null;
+      renderAuthSlot(session, profile);
       setActiveNavLink();
     })
     .catch(() => {
-      renderAuthSlot(null);
+      renderAuthSlot(null, null);
       setActiveNavLink();
     });
 }
@@ -98,7 +110,7 @@ export function refreshHeaderNav() {
   setActiveNavLink();
 }
 
-export function refreshHeaderAuth(session) {
-  renderAuthSlot(session);
+export function refreshHeaderAuth(session, profile = null) {
+  renderAuthSlot(session, profile);
   setActiveNavLink();
 }

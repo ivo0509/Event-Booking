@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
 
 const SAMPLE_USERS = [
-  { email: 'steve@gmail.com', password: 'pass123', name: 'Steve' },
+  { email: 'steve@gmail.com', password: 'pass123', name: 'Steve', role: 'admin' },
   { email: 'maria@gmail.com', password: 'pass123', name: 'Maria' },
   { email: 'peter@gmail.com', password: 'pass123', name: 'Peter' },
 ];
@@ -75,7 +75,7 @@ function addDays(date, days) {
   return result;
 }
 
-async function getOrCreateUser(supabase, { email, password, name }) {
+async function getOrCreateUser(supabase, { email, password, name, role = 'user' }) {
   const { data, error } = await supabase.auth.admin.createUser({
     email,
     password,
@@ -84,6 +84,7 @@ async function getOrCreateUser(supabase, { email, password, name }) {
   });
 
   if (!error) {
+    await upsertPublicUser(supabase, data.user.id, email, name, role);
     return data.user.id;
   }
 
@@ -110,7 +111,24 @@ async function getOrCreateUser(supabase, { email, password, name }) {
     throw updateError;
   }
 
+  await upsertPublicUser(supabase, existing.id, email, name, role);
   return existing.id;
+}
+
+async function upsertPublicUser(supabase, id, email, name, role = 'user') {
+  const { error } = await supabase.from('users').upsert(
+    {
+      id,
+      email,
+      full_name: name,
+      role,
+    },
+    { onConflict: 'id' },
+  );
+
+  if (error) {
+    throw new Error(`Failed to upsert public user ${email}: ${error.message}`);
+  }
 }
 
 async function clearExistingData(supabase) {

@@ -1,0 +1,33 @@
+<section class="admin-page">
+  <div class="container">
+    <div class="admin-head eb-rise eb-delay-1">
+      <span class="eb-chip mb-3"><i class="bi bi-shield-lock"></i> Admin</span>
+      <h1 class="admin-head__title">Admin panel</h1>
+      <p class="text-eb-muted mb-0">Manage events and users across the platform.</p>
+    </div>
+
+    <nav class="admin-nav eb-rise eb-delay-2" data-admin-nav>
+      <a href="/admin" data-route class="admin-nav__link active">Overview</a>
+      <a href="/admin/events" data-route class="admin-nav__link" data-admin-nav-link="events">Events</a>
+      <a href="/admin/users" data-route class="admin-nav__link" data-admin-nav-link="users">Users</a>
+    </nav>
+
+    <div class="admin-cards eb-rise eb-delay-3">
+      <a href="/admin/events" data-route class="eb-glass admin-card-link">
+        <div class="admin-card-link__icon eb-icon-badge">
+          <i class="bi bi-calendar4-event"></i>
+        </div>
+        <h2 class="admin-card-link__title">Events</h2>
+        <p class="text-eb-muted mb-0">List, view, edit and delete all events.</p>
+      </a>
+
+      <a href="/admin/users" data-route class="eb-glass admin-card-link">
+        <div class="admin-card-link__icon eb-icon-badge">
+          <i class="bi bi-people"></i>
+        </div>
+        <h2 class="admin-card-link__title">Users</h2>
+        <p class="text-eb-muted mb-0">List, view, edit and delete user accounts.</p>
+      </a>
+    </div>
+  </div>
+</section>

@@ -33,6 +33,48 @@ const routes = [
     page: () => import('../pages/event-detail/EventDetail.js'),
     requiresAuth: true,
   },
+  {
+    path: '/admin/events/:id/edit',
+    page: () => import('../pages/admin/AdminEventEdit.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin/events/:id',
+    page: () => import('../pages/admin/AdminEventDetail.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin/events',
+    page: () => import('../pages/admin/AdminEventsList.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin/users/:id/edit',
+    page: () => import('../pages/admin/AdminUserEdit.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin/users/:id',
+    page: () => import('../pages/admin/AdminUserDetail.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin/users',
+    page: () => import('../pages/admin/AdminUsersList.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
+  {
+    path: '/admin',
+    page: () => import('../pages/admin/AdminHome.js'),
+    requiresAuth: true,
+    requiresAdmin: true,
+  },
 ];
 
 let contentContainer = null;
@@ -136,6 +178,14 @@ async function renderCurrentRoute() {
   if (match.route.guestOnly && session) {
     navigate('/dashboard', true);
     return;
+  }
+
+  if (match.route.requiresAdmin) {
+    const { isAdmin } = await import('../lib/auth.js');
+    if (!(await isAdmin())) {
+      navigate('/dashboard', true);
+      return;
+    }
   }
 
   if (match.route.path === '/' && session) {
