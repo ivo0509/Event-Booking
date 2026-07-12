@@ -21,6 +21,17 @@ export async function fetchUserById(id) {
   return data;
 }
 
+export async function createUser({ email, password, fullName, role }) {
+  const { data, error } = await supabase.functions.invoke('admin-user-manager', {
+    body: { action: 'create', email, password, fullName, role },
+  });
+
+  if (error) throw error;
+  if (data?.error) throw new Error(data.error);
+
+  return data.user;
+}
+
 export async function updateUser(id, { fullName, role }) {
   const { error } = await supabase
     .from('users')
