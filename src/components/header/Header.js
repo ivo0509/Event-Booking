@@ -1,6 +1,7 @@
 import template from './Header.html?raw';
 import './Header.css';
 import { getSession, signOut } from '../../lib/auth.js';
+import { toast } from '../../lib/toast.js';
 
 function setActiveNavLink() {
   const currentPath = window.location.pathname;
@@ -28,8 +29,12 @@ function renderAuthSlot(session) {
         <i class="bi bi-box-arrow-left me-1"></i>Logout
       </button>
     `;
-    slot.querySelector('button')?.addEventListener('click', () => {
-      signOut();
+    slot.querySelector('button')?.addEventListener('click', async () => {
+      try {
+        await signOut();
+      } catch (error) {
+        toast.error(error.message || 'Logout failed. Please try again.');
+      }
     });
     return;
   }

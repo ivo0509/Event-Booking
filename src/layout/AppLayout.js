@@ -3,6 +3,7 @@ import { renderFooter } from '../components/footer/Footer.js';
 import { createPageContentElement } from '../components/page-content/PageContent.js';
 import { mountLiveBackground } from '../components/live-background/LiveBackground.js';
 import { initRouter } from '../router/router.js';
+import { initToastHost } from '../components/toast/Toast.js';
 
 export function renderLayout(root) {
   const headerMount = document.createElement('div');
@@ -16,6 +17,7 @@ export function renderLayout(root) {
   root.replaceChildren(headerMount, pageContent, footerMount);
 
   mountLiveBackground(document.body);
+  initToastHost();
   renderHeader(headerMount);
   renderFooter(footerMount);
   initRouter(pageContent);

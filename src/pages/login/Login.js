@@ -3,6 +3,7 @@ import './Login.css';
 import { refreshHeaderNav } from '../../components/header/Header.js';
 import { signInWithEmail, signUpWithEmail } from '../../lib/auth.js';
 import { navigate } from '../../router/router.js';
+import { toast } from '../../lib/toast.js';
 
 export const title = 'Login';
 export { template };
@@ -19,21 +20,6 @@ const TAB_COPY = {
     subtitle: 'Register to start booking events.',
   },
 };
-
-function showAlert(container, message, type = 'danger') {
-  const alert = container.querySelector('[data-alert]');
-  if (!alert) return;
-  alert.className = `login-alert alert alert-${type}`;
-  alert.textContent = message;
-  alert.classList.remove('d-none');
-}
-
-function hideAlert(container) {
-  const alert = container.querySelector('[data-alert]');
-  if (!alert) return;
-  alert.classList.add('d-none');
-  alert.textContent = '';
-}
 
 function setLoading(form, loading) {
   const button = form.querySelector('[data-submit-btn]');
@@ -70,17 +56,14 @@ function switchTab(container, tab) {
   if (iconEl) iconEl.className = `bi ${copy.icon}`;
   if (titleEl) titleEl.textContent = copy.title;
   if (subtitleEl) subtitleEl.textContent = copy.subtitle;
-
-  hideAlert(container);
 }
 
-async function handleLogin(container, form) {
-  hideAlert(container);
+async function handleLogin(form) {
   const email = form.email.value.trim();
   const password = form.password.value;
 
   if (!email || !password) {
-    showAlert(container, 'Please enter your email and password.');
+    toast.error('Please enter your email and password.');
     return;
   }
 
@@ -90,30 +73,29 @@ async function handleLogin(container, form) {
     await signInWithEmail(email, password);
     navigate('/dashboard');
   } catch (error) {
-    showAlert(container, error.message || 'Login failed. Please try again.');
+    toast.error(error.message || 'Login failed. Please try again.');
   } finally {
     setLoading(form, false);
   }
 }
 
 async function handleRegister(container, form) {
-  hideAlert(container);
   const email = form.email.value.trim();
   const password = form.password.value;
   const confirmPassword = form.confirmPassword.value;
 
   if (!email || !password || !confirmPassword) {
-    showAlert(container, 'Please fill in all fields.');
+    toast.error('Please fill in all fields.');
     return;
   }
 
   if (password.length < 6) {
-    showAlert(container, 'Password must be at least 6 characters.');
+    toast.error('Password must be at least 6 characters.');
     return;
   }
 
   if (password !== confirmPassword) {
-    showAlert(container, 'Passwords do not match.');
+    toast.error('Passwords do not match.');
     return;
   }
 
@@ -128,17 +110,13 @@ async function handleRegister(container, form) {
     }
 
     if (user) {
-      showAlert(
-        container,
-        'Account created! Check your email to confirm, then log in.',
-        'success',
-      );
+      toast.info('Account created. Check your email to confirm, then log in.');
       switchTab(container, 'login');
       const loginForm = container.querySelector('[data-form="login"]');
       if (loginForm) loginForm.email.value = email;
     }
   } catch (error) {
-    showAlert(container, error.message || 'Registration failed. Please try again.');
+    toast.error(error.message || 'Registration failed. Please try again.');
   } finally {
     setLoading(form, false);
   }
@@ -154,7 +132,7 @@ export function init(container) {
 
   loginForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-    handleLogin(container, loginForm);
+    handleLogin(loginForm);
   });
 
   registerForm?.addEventListener('submit', (event) => {
