@@ -42,28 +42,3 @@
   text-align: center;
   flex: 1 1 auto;
 }
-
-.site-footer__social {
-  display: flex;
-  gap: 0.6rem;
-}
-
-.site-footer__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.3rem;
-  height: 2.3rem;
-  border-radius: 0.65rem;
-  font-size: 1.05rem;
-  color: var(--eb-muted);
-  border: 1px solid var(--eb-border);
-  text-decoration: none;
-  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.site-footer__icon:hover {
-  color: var(--eb-text);
-  border-color: var(--eb-cyan);
-  transform: translateY(-2px);
-}
